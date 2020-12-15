@@ -6,7 +6,7 @@ const { generateHash } = require('../helpers/bycript');
 
 const Schema = mongoose.Schema;
 
-const clientSchema = new mongoose.Schema({
+const clientSchema = new Schema({
   email:     { type: String, required: true },
   password:  { type: String, required: true, select: false },
   createdAt: { type: Date, default: Date.now }
