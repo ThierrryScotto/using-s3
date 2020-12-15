@@ -10,17 +10,16 @@ const registerClient = async (req, res) => {
   try {
     const body = req.body;
     
-    const client = await client.findOne({ email: body.email });
-    if (!client) {
+    const clientFound = await client.find();
+    if (!clientFound) {
       return res.status(400).send({ message: "E-mail already registered" });
     }
-    console.log('-- GAI --', client);
 
     const clientCreated = await client.create(body);
 
     const token = generateToken(clientCreated.id);
 
-    return res.status(201).send({ userCreated, token });
+    return res.status(201).send({ clientCreated, token });
   } catch(error) {
     console.log('Error: ', error);
     return res.status(500).send({ message: "Internal error" });

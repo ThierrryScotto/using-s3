@@ -3,24 +3,24 @@
 const { compare }       = require('../../helpers/bycript'); 
 const { generateToken } = require('../../helpers/jwt');
 
-const User = require('../models/user');
+const client = require('../../models/client');
 
 const checkToken = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email }).select('+password');
+  const clientFound = await client.findOne({ email }).select('+password');
 
-  if (!user) {
-    return res.status(404).send('User not found');
+  if (!clientFound) {
+    return res.status(404).send('Client not found');
   }
 
-  if (!await compare(password, user.password)) {
+  if (!await compare(password, clientFound.password)) {
     return res.status(404).send({ error: 'Invalid password' });
   }
 
-  const token = generateToken(user.id);
+  const token = generateToken(clientFound.id);
 
-  res.send({ user, token });
+  res.send({ clientFound, token });
 }
 
 module.exports = {

@@ -19,8 +19,4 @@ clientSchema.pre('save', async function (next) {
   next();
 });
 
-const client = mongoose.model('client', clientSchema);
-
-module.exports = {
-  clientSchema
-};
+module.exports = mongoose.model('client', clientSchema);

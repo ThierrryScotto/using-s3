@@ -8,6 +8,6 @@ module.exports.compare = async (password, clientPassword) => {
 };
 
 module.exports.generateHash = async (password) => {
-  const salt = await bcrypt.generateSalt();
+  const salt = await bcrypt.genSaltSync();
   return await bcrypt.hash(password, salt);
 };
