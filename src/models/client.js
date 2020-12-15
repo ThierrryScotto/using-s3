@@ -1,21 +1,22 @@
-// 'use strict';
+'use strict';
 
-// const mongoose         = require('../services/db/index');
-// const { generateHash } = require('../services/bcrypt/index');
+// imports
+const mongoose         = require('../services/db/index');
+const { generateHash } = require('../helpers/bycript');
 
-// const Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-// const userSchema = new Schema({
-//   email:     { type: String, required: true },
-//   password:  { type: String, required: true, select: false },
-//   createdAt: { type: Date, default: Date.now }
-// });
+const clientSchema = new mongoose.Schema({
+  email:     { type: String, required: true },
+  password:  { type: String, required: true, select: false },
+  createdAt: { type: Date, default: Date.now }
+});
 
-// userSchema.pre('save', async function (next) {
-//   const hash = await generateHash(this.password);
-//   this.password = hash;
+clientSchema.pre('save', async function (next) {
+  const hash = await generateHash(this.password);
+  this.password = hash;
 
-//   next();
-// });
+  next();
+});
 
-// module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('client', clientSchema);
