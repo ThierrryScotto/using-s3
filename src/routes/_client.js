@@ -1,31 +1,11 @@
-'use strict';
+"use strict"
 
-// model
-const client = require= require('../models/client');
+// dependencies
+const express = require('./index');
 
-// imports
-const { generateToken } = require('../helpers/jwt');
+//controllers
+const clientPersisteController = require('../controllers/client/persist.controller');
 
-const registerClient = async (req, res) => {
-  try {
-    const body = req.body;
+express.router.post('/client', clientPersisteController.registerClient);
 
-    const client = await client.findOne({ email: body.email });
-
-    if (client) {
-      return res.status(400).send({ message: "E-mail already registered" });
-    }
-
-    const clientCreated = await client.create(body);
-    
-    const token = generateToken(clientCreated.id);
-
-    return res.status(201).send({ userCreated, token });
-  } catch(error) {
-    return res.status(500).send({ message: "Internal error" });
-  }
-};
-
-module.exports = {
-  registerClient
-}
+module.exports = express.router;
