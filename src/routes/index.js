@@ -2,10 +2,11 @@
 
 // dependencies
 require('dotenv').config();
-const express    = require('express');
-const cors       = require('cors');
-const bodyParser = require('body-parser');
-const helmet     = require('helmet');
+const express           = require('express');
+const cors              = require('cors');
+const bodyParser        = require('body-parser');
+const helmet            = require('helmet');
+const expressFileupload = require('express-fileupload');
 
 const port = process.env.API_PORT || 3000;
 
@@ -22,6 +23,7 @@ class AppController {
 		this.express.use(express.json());
 		this.express.use(helmet());
 		this.express.use(cors());
+		this.express.use(expressFileupload());
 	}
 
 	connection() {

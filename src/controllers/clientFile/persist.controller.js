@@ -8,14 +8,11 @@ const s3 = require('../../services/s3');
 
 const registerClientFile = async (req, res) => {
   try {
-    const { idClient } = req.params; 
-    const { fileName } = req.body;
-    const body = req.body;
+    const { idClient } = req.params;
+    const file         = req.files.fileParam;
 
-    console.log(body);
-
-    const salvedFile = await clientFile.create({ idClient, fileName });
-    s3.uploadFile(salvedFile.fileName, file);
+    const salvedFile = await clientFile.create({ idClient, fileName: file.name });
+    s3.uploadFile(salvedFile._id, file);
 
     return res.status(201).send({ salvedFile });
   } catch(error) {
