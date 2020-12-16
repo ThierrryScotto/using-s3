@@ -1,6 +1,7 @@
 'use strict';
 
-const fs  = require('fs');
+// dependencies
+require('dotenv').config();
 const AWS = require('aws-sdk');
 
 const s3 = new AWS.S3({
@@ -8,25 +9,28 @@ const s3 = new AWS.S3({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 
-const fileName = 'certificadoTDCOnline2020POA.pdf';
+const uploadFile = (fileName, file) => {
+  const params = {
+    Bucket: process.env.BUCKET_NAME,
+    Key   : fileName,
+    Body  : file
+  };
 
-
-const uploadFile = () => {
-  fs.readFile(fileName, (err, data) => {
-    if (err) {
-      throw err;
-    }
-
-    const params = {
-      Bucket: 'sls-dev-serverlessdeploymentbucket-1g5ip4utkw5o2/files',
-      Key: 'certificadoTDCOnline2020POA.pdf',
-      Body: JSON.stringify(data, null, 2)
-    };
-
-    s3.upload(params, function (err, data) {
-      console.log(`Data uploaded successfully at ${data.Location}`);
-    })
+  s3.upload(params, function (err, data) {
+    console.log(`Data uploaded successfully at ${data.Location}`);
   })
 };
 
-uploadFile();
+const getFile = (nameFile) => {
+  const params = {
+    Bucket: process.env.BUCKET_NAME,
+    Key   : fileName
+  };
+
+  s3.getObject(params).createReadStream().pipe(nameFile);
+}
+
+module.exports = {
+  uploadFile,
+  getFile
+}

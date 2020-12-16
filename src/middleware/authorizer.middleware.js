@@ -1,6 +1,6 @@
 'use strict';
 
-const { verifyToken } = require('../services/jwt/index');
+const { checkToken } = require('../helpers/jwt');
 
 module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
     return res.status(401).send({ error: 'You need an access token' });
   }
 
-  if (!verifyToken(authHeader)) {
+  if (!checkToken(authHeader)) {
     return res.status(401).send({ error: 'Invalid token' })
   }  
 

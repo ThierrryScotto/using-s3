@@ -5,11 +5,11 @@ const jwt = require('jsonwebtoken');
 
 module.exports.generateToken = (params) => {
   return jwt.sign({ params }, process.env.JWT_SECRETE, {
-    expiresIn: 60
+    expiresIn: 86400
   });
 }
 
-module.exports.verifyToken = (token) => {
+module.exports.checkToken = (token) => {
   return jwt.verify(token, process.env.JWT_SECRETE, (err) => {
     if (err) {
       console.error(err);
