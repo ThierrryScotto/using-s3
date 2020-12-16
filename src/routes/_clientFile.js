@@ -7,8 +7,10 @@ const express = require('./index');
 const checkToken = require('../middleware/authorizer.middleware')
 
 //controllers
-const clientFileController = require('../controllers/clientFile/persist.controller');
+const clientFilePersistController = require('../controllers/clientFile/persist.controller');
+const clientFileRetrieveController = require('../controllers/clientFile/retrive.controller.');
 
-express.router.post('/client/:idClient/file', checkToken, clientFileController.registerClientFile);
+express.router.post('/client/file', checkToken, clientFilePersistController.registerClientFile);
+express.router.get('/client/:clientId/file/:fileName', checkToken, clientFileRetrieveController.getClientFile);
 
 module.exports = express.router;

@@ -14,14 +14,14 @@ const s3 = new AWS.S3({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 
-const uploadFile = (idClientFile, file) => {
+const uploadFile = async (idClientFile, file) => {
   const params = {
     Bucket: process.env.BUCKET_NAME,
     Key   : keyCreate(idClientFile, file.name),
     Body  : file.data
   };
 
-  s3.upload(params, function (err, data) {
+  await s3.upload(params, function (err, data) {
     new Promise(function (resolve, reject) {
       if (err) {
         reject(err);
@@ -33,13 +33,15 @@ const uploadFile = (idClientFile, file) => {
   });
 };
 
-const getFile = (nameFile) => {
+const getFile = async (idClientFile, fileName) => {
+  fileName = keyCreate(idClientFile, fileName);
+
   const params = {
     Bucket: process.env.BUCKET_NAME,
     Key   : fileName
   };
 
-  s3.getObject(params).createReadStream().pipe(nameFile);
+  return await s3.getObject(params).promise();
 }
 
 module.exports = {

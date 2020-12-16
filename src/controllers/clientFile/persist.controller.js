@@ -1,18 +1,24 @@
 'use strict';
 
-// model
+// models
 const clientFile = require('../../models/clientFile');
+const client     = require('../../models/client');
 
 // s3
 const s3 = require('../../services/s3');
 
 const registerClientFile = async (req, res) => {
   try {
-    const { idClient } = req.params;
+    const { clientId } = req.body;
     const file         = req.files.fileParam;
 
-    const salvedFile = await clientFile.create({ idClient, fileName: file.name });
-    s3.uploadFile(salvedFile._id, file);
+    const clientFound = await client.findOne({ _id: clientId });
+    if (!clientFound) {
+      return res.status(404).send({ message: `Client ${clientId} not found` });
+    }
+
+    const salvedFile = await clientFile.create({ clientId, fileName: file.name });
+    await s3.uploadFile(salvedFile._id, file);
 
     return res.status(201).send({ salvedFile });
   } catch(error) {
