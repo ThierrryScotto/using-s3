@@ -15,8 +15,7 @@ const getClientFile = async (req, res) => {
       return res.status(404).send({ message: `File ${fileName} or Client ${clientId} not found` });
     }
 
-    const file = await s3.getFile(clientFound._id, fileName);
-    return res.status(200).send({ file });
+    await s3.getFile(clientFound._id, fileName, res);
   } catch(error) {
     console.log('Error: ', error);
     return res.status(500).send({ message: "Internal error" });

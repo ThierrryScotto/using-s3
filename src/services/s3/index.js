@@ -33,7 +33,7 @@ const uploadFile = async (idClientFile, file) => {
   });
 };
 
-const getFile = async (idClientFile, fileName) => {
+const getFile = async (idClientFile, fileName, res) => {
   fileName = keyCreate(idClientFile, fileName);
 
   const params = {
@@ -41,7 +41,11 @@ const getFile = async (idClientFile, fileName) => {
     Key   : fileName
   };
 
-  return await s3.getObject(params).promise();
+  s3.getObject(params)
+    .createReadStream()
+      .on('error', function(err){
+        res.status(500).json({error:"Error -> " + err});
+    }).pipe(res);
 }
 
 module.exports = {
